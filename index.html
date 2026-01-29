@@ -64,7 +64,7 @@
   <div class="card">
     <h1>Potvrzení účasti (RSVP)</h1>
 
-    <form id="rsvpForm" novalidate>
+    <form id="rsvpForm" method="POST" action="https://script.google.com/macros/s/AKfycbwsKFXwFYTt8wfmgKCHxZsVbxqRXS5rOTZduVXYe0tfAr6dOWz3HIcV6Pt2iCvjeOET/exec" target="hidden_iframe" novalidate>
       <label>Jméno a příjmení
         <input type="text" name="name" required />
       </label>
@@ -88,6 +88,7 @@
 
       <button type="submit" id="submitBtn">Odeslat</button>
     </form>
+    <iframe name="hidden_iframe" style="display:none;"></iframe>
   </div>
 
   <script>
@@ -97,8 +98,6 @@
     const nameInput = form.querySelector('input[name="name"]');
     const adultsInput = document.getElementById('adults');
     const childrenInput = document.getElementById('children');
-
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwsKFXwFYTt8wfmgKCHxZsVbxqRXS5rOTZduVXYe0tfAr6dOWz3HIcV6Pt2iCvjeOET/exec';
 
     counts.classList.add('hidden');
 
@@ -139,31 +138,11 @@
       counts.classList.toggle('hidden', attending.value !== 'ANO');
     });
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      if (!validateForm(true)) return;
-
-      const data = Object.fromEntries(new FormData(form));
-
-      if (data.attending !== 'ANO') {
-        data.adults = '';
-        data.children = '';
-      }
-
-      try {
-        await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify(data),
-          headers: { 'Content-Type': 'application/json' }
-        });
-
-        alert('Děkujeme za vyplnění RSVP!');
-        form.reset();
-        counts.classList.add('hidden');
-        clearErrors();
-      } catch (err) {
-        alert('Chyba při odesílání. Zkuste to prosím znovu.');
+    form.addEventListener('submit', (e) => {
+      if (!validateForm(true)) {
+        e.preventDefault(); // stop submission if invalid
+      } else {
+        setTimeout(() => alert('Děkujeme za vyplnění RSVP!'), 100); // show confirmation
       }
     });
   </script>
