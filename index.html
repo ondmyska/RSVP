@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <title>RSVP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f7f9;
+      padding: 20px;
+    }
+    .card {
+      max-width: 420px;
+      margin: auto;
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 1.4rem;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: 500;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    button {
+      margin-top: 24px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1e4fd8;
+    }
+    .hidden {
+      display: none;
+    }
+    .error {
+      border-color: #dc2626;
+      background: #fef2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Potvrzení účasti (RSVP)</h1>
+
+    <form id="rsvpForm" novalidate>
+      <label>Jméno a příjmení
+        <input type="text" name="name" required />
+      </label>
+
+      <label>Zúčastníte se?
+        <select name="attending" id="attending" required>
+          <option value="">-- vyberte --</option>
+          <option value="ANO">ANO</option>
+          <option value="NE">NE</option>
+        </select>
+      </label>
+
+      <div id="counts" class="hidden">
+        <label>Počet osob
+          <div class="row">
+            <input type="number" name="adults" id="adults" min="1" placeholder="Dospělí" />
+            <input type="number" name="children" id="children" min="0" placeholder="Děti" />
+          </div>
+        </label>
+      </div>
+
+      <button type="submit" id="submitBtn">Odeslat</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('rsvpForm');
+    const attending = document.getElementById('attending');
+    const counts = document.getElementById('counts');
+    const nameInput = form.querySelector('input[name="name"]');
+    const adultsInput = document.getElementById('adults');
+    const childrenInput = document.getElementById('children');
+
+    const SCRIPT_URL = 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+    counts.classList.add('hidden');
+
+    function clearErrors() {
+      [nameInput, attending, adultsInput, childrenInput].forEach(el => el.classList.remove('error'));
+    }
+
+    function validateForm(showErrors = false) {
+      let valid = true;
+      clearErrors();
+
+      if (!nameInput.value.trim()) {
+        valid = false;
+        if (showErrors) nameInput.classList.add('error');
+      }
+
+      if (!attending.value) {
+        valid = false;
+        if (showErrors) attending.classList.add('error');
+      }
+
+      if (attending.value === 'ANO') {
+        if (adultsInput.value === '' || Number(adultsInput.value) < 1) {
+          valid = false;
+          if (showErrors) adultsInput.classList.add('error');
+        }
+
+        if (childrenInput.value === '' || Number(childrenInput.value) < 0) {
+          valid = false;
+          if (showErrors) childrenInput.classList.add('error');
+        }
+      }
+
+      return valid;
+    }
+
+    attending.addEventListener('change', () => {
+      counts.classList.toggle('hidden', attending.value !== 'ANO');
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!validateForm(true)) return;
+
+      const data = Object.fromEntries(new FormData(form));
+
+      if (data.attending !== 'ANO') {
+        data.adults = '';
+        data.children = '';
+      }
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        alert('Děkujeme za vyplnění RSVP!');
+        form.reset();
+        counts.classList.add('hidden');
+        clearErrors();
+      } catch (err) {
+        alert('Chyba při odesílání. Zkuste to prosím znovu.');
+      }
+    });
+  </script>
+</body>
+</html>
