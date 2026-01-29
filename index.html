@@ -64,6 +64,7 @@
   <div class="card">
     <h1>Potvrzení účasti (RSVP)</h1>
 
+    <!-- Form submits via POST to Apps Script using hidden iframe -->
     <form id="rsvpForm" method="POST" action="https://script.google.com/macros/s/AKfycbwsKFXwFYTt8wfmgKCHxZsVbxqRXS5rOTZduVXYe0tfAr6dOWz3HIcV6Pt2iCvjeOET/exec" target="hidden_iframe" novalidate>
       <label>Jméno a příjmení
         <input type="text" name="name" required />
@@ -86,8 +87,10 @@
         </label>
       </div>
 
-      <button type="submit" id="submitBtn">Odeslat</button>
+      <button type="submit">Odeslat</button>
     </form>
+
+    <!-- Hidden iframe to receive submission -->
     <iframe name="hidden_iframe" style="display:none;"></iframe>
   </div>
 
@@ -99,35 +102,36 @@
     const adultsInput = document.getElementById('adults');
     const childrenInput = document.getElementById('children');
 
+    // Hide counts by default
     counts.classList.add('hidden');
 
     function clearErrors() {
       [nameInput, attending, adultsInput, childrenInput].forEach(el => el.classList.remove('error'));
     }
 
-    function validateForm(showErrors = false) {
+    function validateForm() {
       let valid = true;
       clearErrors();
 
       if (!nameInput.value.trim()) {
         valid = false;
-        if (showErrors) nameInput.classList.add('error');
+        nameInput.classList.add('error');
       }
 
       if (!attending.value) {
         valid = false;
-        if (showErrors) attending.classList.add('error');
+        attending.classList.add('error');
       }
 
       if (attending.value === 'ANO') {
         if (adultsInput.value === '' || Number(adultsInput.value) < 1) {
           valid = false;
-          if (showErrors) adultsInput.classList.add('error');
+          adultsInput.classList.add('error');
         }
 
         if (childrenInput.value === '' || Number(childrenInput.value) < 0) {
           valid = false;
-          if (showErrors) childrenInput.classList.add('error');
+          childrenInput.classList.add('error');
         }
       }
 
@@ -139,10 +143,10 @@
     });
 
     form.addEventListener('submit', (e) => {
-      if (!validateForm(true)) {
+      if (!validateForm()) {
         e.preventDefault(); // stop submission if invalid
       } else {
-        setTimeout(() => alert('Děkujeme za vyplnění RSVP!'), 100); // show confirmation
+        setTimeout(() => alert('Děkujeme za vyplnění RSVP!'), 100); // confirmation
       }
     });
   </script>
