@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>RSVP</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -19,9 +19,9 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     }
     h1 {
-      margin-top: 0;
-      font-size: 1.4rem;
       text-align: center;
+      font-size: 1.4rem;
+      margin-top: 0;
     }
     label {
       display: block;
@@ -63,15 +63,13 @@
 <body>
   <div class="card">
     <h1>Potvrzení účasti (RSVP)</h1>
-
-    <!-- Form submits via POST to Apps Script using hidden iframe -->
-    <form id="rsvpForm" method="POST" action="https://script.google.com/macros/s/AKfycbwsKFXwFYTt8wfmgKCHxZsVbxqRXS5rOTZduVXYe0tfAr6dOWz3HIcV6Pt2iCvjeOET/exec" target="hidden_iframe" novalidate>
+    <form id="rsvpForm" novalidate>
       <label>Jméno a příjmení
-        <input type="text" name="name" required />
+        <input type="text" name="name" />
       </label>
 
       <label>Zúčastníte se?
-        <select name="attending" id="attending" required>
+        <select name="attending" id="attending">
           <option value="">-- vyberte --</option>
           <option value="ANO">ANO</option>
           <option value="NE">NE</option>
@@ -87,11 +85,8 @@
         </label>
       </div>
 
-      <button type="submit">Odeslat</button>
+      <button type="submit" id="submitBtn">Odeslat</button>
     </form>
-
-    <!-- Hidden iframe to receive submission -->
-    <iframe name="hidden_iframe" style="display:none;"></iframe>
   </div>
 
   <script>
@@ -102,36 +97,41 @@
     const adultsInput = document.getElementById('adults');
     const childrenInput = document.getElementById('children');
 
-    // Hide counts by default
-    counts.classList.add('hidden');
+    // Vercel backend URL
+    const SCRIPT_URL = 'https://rsvp-backend1.vercel.app/api/rsvp';
 
     function clearErrors() {
-      [nameInput, attending, adultsInput, childrenInput].forEach(el => el.classList.remove('error'));
+      [nameInput, attending, adultsInput, childrenInput].forEach(el => {
+        el.classList.remove('error');
+      });
     }
 
-    function validateForm() {
+    function validateForm(showErrors = false) {
       let valid = true;
       clearErrors();
 
       if (!nameInput.value.trim()) {
         valid = false;
-        nameInput.classList.add('error');
+        if (showErrors) nameInput.classList.add('error');
       }
 
       if (!attending.value) {
         valid = false;
-        attending.classList.add('error');
+        if (showErrors) attending.classList.add('error');
       }
 
       if (attending.value === 'ANO') {
-        if (adultsInput.value === '' || Number(adultsInput.value) < 1) {
+        const adults = adultsInput.value;
+        const children = childrenInput.value;
+
+        if (adults === '' || Number(adults) < 1) {
           valid = false;
-          adultsInput.classList.add('error');
+          if (showErrors) adultsInput.classList.add('error');
         }
 
-        if (childrenInput.value === '' || Number(childrenInput.value) < 0) {
+        if (children === '' || Number(children) < 0) {
           valid = false;
-          childrenInput.classList.add('error');
+          if (showErrors) childrenInput.classList.add('error');
         }
       }
 
@@ -142,11 +142,34 @@
       counts.classList.toggle('hidden', attending.value !== 'ANO');
     });
 
-    form.addEventListener('submit', (e) => {
-      if (!validateForm()) {
-        e.preventDefault(); // stop submission if invalid
-      } else {
-        setTimeout(() => alert('Děkujeme za vyplnění RSVP!'), 100); // confirmation
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!validateForm(true)) return;
+
+      const data = {
+        name: nameInput.value.trim(),
+        attending: attending.value,
+        adults: attending.value === 'ANO' ? adultsInput.value : '',
+        children: attending.value === 'ANO' ? childrenInput.value : ''
+      };
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) throw new Error('Network error');
+
+        alert('Děkujeme za vyplnění RSVP!');
+        form.reset();
+        counts.classList.add('hidden');
+        clearErrors();
+      } catch (err) {
+        alert('Chyba při odesílání. Zkuste to prosím znovu.');
+        console.error(err);
       }
     });
   </script>
