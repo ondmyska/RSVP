@@ -1,191 +1,214 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <title>RSVP</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f6f7f9;
-      padding: 20px;
-    }
-    .card {
-      max-width: 420px;
-      margin: auto;
-      background: white;
-      padding: 24px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-      text-align: center;
-    }
-    h1 {
-      font-size: 1.4rem;
-      margin-top: 0;
-    }
-    label {
-      display: block;
-      margin-top: 16px;
-      font-weight: 500;
-      text-align: left;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    button {
-      margin-top: 24px;
-      background: #2563eb;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #1e4fd8;
-    }
-    .hidden {
-      display: none;
-    }
-    .error {
-      border-color: #dc2626;
-      background: #fef2f2;
-    }
-    .success {
-      font-size: 1.1rem;
-      line-height: 1.6;
-    }
-    .success span {
-      font-size: 2rem;
-      display: block;
-      margin-bottom: 12px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>RSVP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body {
+  font-family: system-ui, sans-serif;
+  background: #f5f6fa;
+  padding: 20px;
+}
+
+.card {
+  max-width: 420px;
+  margin: auto;
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+h1 {
+  text-align: center;
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  margin-top: 16px;
+  font-weight: 500;
+}
+
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+button {
+  margin-top: 24px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.hidden {
+  display: none;
+}
+
+.error {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+
+#loading {
+  margin-top: 12px;
+  color: #555;
+  text-align: center;
+}
+</style>
 </head>
+
 <body>
 
-  <div class="card">
-    <h1>Potvrzení účasti (RSVP)</h1>
+<div class="card">
 
-    <form id="rsvpForm" novalidate>
-      <label>Jméno a příjmení
-        <input type="text" name="name">
-      </label>
+  <h1>Potvrzení účasti</h1>
 
-      <label>Zúčastníte se?
-        <select name="attending" id="attending">
-          <option value="">-- vyberte --</option>
-          <option value="ANO">ANO</option>
-          <option value="NE">NE</option>
-        </select>
-      </label>
+  <!-- FORM -->
+  <form id="rsvpForm" novalidate>
 
-      <div id="counts" class="hidden">
-        <label>Počet osob
-          <div class="row">
-            <input type="number" id="adults" min="1" placeholder="Dospělí">
-            <input type="number" id="children" min="0" placeholder="Děti">
-          </div>
-        </label>
+    <label>
+      Jméno a příjmení
+      <input type="text" id="name">
+    </label>
+
+    <label>
+      Zúčastníte se?
+      <select id="attending">
+        <option value="">-- vyberte --</option>
+        <option value="ANO">ANO</option>
+        <option value="NE">NE</option>
+      </select>
+    </label>
+
+    <div id="counts" class="hidden">
+      <label>Počet osob</label>
+      <div class="row">
+        <input type="number" id="adults" min="1" placeholder="Dospělí">
+        <input type="number" id="children" min="0" placeholder="Děti">
       </div>
-
-      <button type="submit">Odeslat</button>
-    </form>
-
-    <div id="thankYou" class="success hidden">
-      <span>🎉</span>
-      <strong>Děkujeme za vyplnění!</strong><br>
-      Těšíme se na vás ❤️
     </div>
+
+    <button type="submit" id="submitBtn">Odeslat</button>
+    <p id="loading" class="hidden">Odesílám odpověď…</p>
+
+  </form>
+
+  <!-- THANK YOU -->
+  <div id="thankYou" class="hidden">
+    <h2>Děkujeme 💙</h2>
+    <p>Vaše odpověď byla úspěšně odeslána.</p>
   </div>
 
-  <script>
-    const form = document.getElementById('rsvpForm');
-    const thankYou = document.getElementById('thankYou');
-    const attending = document.getElementById('attending');
-    const counts = document.getElementById('counts');
+</div>
 
-    const nameInput = form.querySelector('input[name="name"]');
-    const adultsInput = document.getElementById('adults');
-    const childrenInput = document.getElementById('children');
+<script>
+const SCRIPT_URL = "https://rsvp-backend1.vercel.app/api/rsvp";
 
-    const SCRIPT_URL = 'https://rsvp-backend1.vercel.app/api/rsvp';
+const form = document.getElementById("rsvpForm");
+const thankYou = document.getElementById("thankYou");
+const attending = document.getElementById("attending");
+const counts = document.getElementById("counts");
 
-    function clearErrors() {
-      [nameInput, attending, adultsInput, childrenInput].forEach(el => {
-        el.classList.remove('error');
-      });
+const nameInput = document.getElementById("name");
+const adultsInput = document.getElementById("adults");
+const childrenInput = document.getElementById("children");
+
+const submitBtn = document.getElementById("submitBtn");
+const loading = document.getElementById("loading");
+
+attending.addEventListener("change", () => {
+  counts.classList.toggle("hidden", attending.value !== "ANO");
+});
+
+function clearErrors() {
+  [nameInput, attending, adultsInput, childrenInput].forEach(el => {
+    el.classList.remove("error");
+  });
+}
+
+function validate() {
+  clearErrors();
+  let valid = true;
+
+  if (!nameInput.value.trim()) {
+    nameInput.classList.add("error");
+    valid = false;
+  }
+
+  if (!attending.value) {
+    attending.classList.add("error");
+    valid = false;
+  }
+
+  if (attending.value === "ANO") {
+    if (adultsInput.value === "" || Number(adultsInput.value) < 1) {
+      adultsInput.classList.add("error");
+      valid = false;
     }
 
-    function validate(showErrors = false) {
-      let valid = true;
-      clearErrors();
-
-      if (!nameInput.value.trim()) {
-        valid = false;
-        if (showErrors) nameInput.classList.add('error');
-      }
-
-      if (!attending.value) {
-        valid = false;
-        if (showErrors) attending.classList.add('error');
-      }
-
-      if (attending.value === 'ANO') {
-        if (adultsInput.value === '' || Number(adultsInput.value) < 1) {
-          valid = false;
-          if (showErrors) adultsInput.classList.add('error');
-        }
-        if (childrenInput.value === '') {
-          valid = false;
-          if (showErrors) childrenInput.classList.add('error');
-        }
-      }
-
-      return valid;
+    if (childrenInput.value === "") {
+      childrenInput.classList.add("error");
+      valid = false;
     }
+  }
 
-    attending.addEventListener('change', () => {
-      counts.classList.toggle('hidden', attending.value !== 'ANO');
+  return valid;
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!validate()) return;
+
+  submitBtn.disabled = true;
+  loading.classList.remove("hidden");
+
+  const data = {
+    name: nameInput.value.trim(),
+    attending: attending.value,
+    adults: attending.value === "ANO" ? Number(adultsInput.value) : 0,
+    children: attending.value === "ANO" ? Number(childrenInput.value) : 0
+  };
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
     });
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    if (!res.ok) throw new Error();
 
-      if (!validate(true)) return;
+    form.classList.add("hidden");
+    loading.classList.add("hidden");
+    thankYou.classList.remove("hidden");
 
-      const data = {
-        name: nameInput.value.trim(),
-        attending: attending.value,
-        adults: attending.value === 'ANO' ? adultsInput.value : 0,
-        children: attending.value === 'ANO' ? childrenInput.value : 0
-      };
-
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-
-        if (!res.ok) throw new Error();
-
-        form.classList.add('hidden');
-        thankYou.classList.remove('hidden');
-
-      } catch {
-        alert('Chyba při odesílání. Zkuste to prosím znovu.');
-      }
-    });
-  </script>
+  } catch {
+    loading.classList.add("hidden");
+    submitBtn.disabled = false;
+    alert("Chyba při odesílání.");
+  }
+});
+</script>
 
 </body>
 </html>
