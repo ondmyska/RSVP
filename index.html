@@ -17,9 +17,9 @@
       padding: 24px;
       border-radius: 16px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      text-align: center;
     }
     h1 {
-      text-align: center;
       font-size: 1.4rem;
       margin-top: 0;
     }
@@ -27,6 +27,7 @@
       display: block;
       margin-top: 16px;
       font-weight: 500;
+      text-align: left;
     }
     input, select, button {
       width: 100%;
@@ -58,14 +59,25 @@
       border-color: #dc2626;
       background: #fef2f2;
     }
+    .success {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    .success span {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 12px;
+    }
   </style>
 </head>
 <body>
+
   <div class="card">
     <h1>Potvrzení účasti (RSVP)</h1>
+
     <form id="rsvpForm" novalidate>
       <label>Jméno a příjmení
-        <input type="text" name="name" />
+        <input type="text" name="name">
       </label>
 
       <label>Zúčastníte se?
@@ -79,25 +91,32 @@
       <div id="counts" class="hidden">
         <label>Počet osob
           <div class="row">
-            <input type="number" name="adults" id="adults" min="1" placeholder="Dospělí" />
-            <input type="number" name="children" id="children" min="0" placeholder="Děti" />
+            <input type="number" id="adults" min="1" placeholder="Dospělí">
+            <input type="number" id="children" min="0" placeholder="Děti">
           </div>
         </label>
       </div>
 
-      <button type="submit" id="submitBtn">Odeslat</button>
+      <button type="submit">Odeslat</button>
     </form>
+
+    <div id="thankYou" class="success hidden">
+      <span>🎉</span>
+      <strong>Děkujeme za vyplnění!</strong><br>
+      Těšíme se na vás ❤️
+    </div>
   </div>
 
   <script>
     const form = document.getElementById('rsvpForm');
+    const thankYou = document.getElementById('thankYou');
     const attending = document.getElementById('attending');
     const counts = document.getElementById('counts');
+
     const nameInput = form.querySelector('input[name="name"]');
     const adultsInput = document.getElementById('adults');
     const childrenInput = document.getElementById('children');
 
-    // Vercel backend URL
     const SCRIPT_URL = 'https://rsvp-backend1.vercel.app/api/rsvp';
 
     function clearErrors() {
@@ -106,7 +125,7 @@
       });
     }
 
-    function validateForm(showErrors = false) {
+    function validate(showErrors = false) {
       let valid = true;
       clearErrors();
 
@@ -121,15 +140,11 @@
       }
 
       if (attending.value === 'ANO') {
-        const adults = adultsInput.value;
-        const children = childrenInput.value;
-
-        if (adults === '' || Number(adults) < 1) {
+        if (adultsInput.value === '' || Number(adultsInput.value) < 1) {
           valid = false;
           if (showErrors) adultsInput.classList.add('error');
         }
-
-        if (children === '' || Number(children) < 0) {
+        if (childrenInput.value === '') {
           valid = false;
           if (showErrors) childrenInput.classList.add('error');
         }
@@ -145,33 +160,32 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      if (!validateForm(true)) return;
+      if (!validate(true)) return;
 
       const data = {
         name: nameInput.value.trim(),
         attending: attending.value,
-        adults: attending.value === 'ANO' ? adultsInput.value : '',
-        children: attending.value === 'ANO' ? childrenInput.value : ''
+        adults: attending.value === 'ANO' ? adultsInput.value : 0,
+        children: attending.value === 'ANO' ? childrenInput.value : 0
       };
 
       try {
-        const response = await fetch(SCRIPT_URL, {
+        const res = await fetch(SCRIPT_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
 
-        if (!response.ok) throw new Error('Network error');
+        if (!res.ok) throw new Error();
 
-        alert('Děkujeme za vyplnění RSVP!');
-        form.reset();
-        counts.classList.add('hidden');
-        clearErrors();
-      } catch (err) {
+        form.classList.add('hidden');
+        thankYou.classList.remove('hidden');
+
+      } catch {
         alert('Chyba při odesílání. Zkuste to prosím znovu.');
-        console.error(err);
       }
     });
   </script>
+
 </body>
 </html>
