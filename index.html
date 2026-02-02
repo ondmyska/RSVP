@@ -2,43 +2,111 @@
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
-<title>RSVP</title>
+<title>Yumi slaví 1. narozeniny</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
+:root {
+  --bg: #FAF9F7;
+  --card: #FFFFFF;
+  --primary: #8FAEA0;
+  --secondary: #F2C9B6;
+  --text: #2F2F2F;
+  --muted: #6B6B6B;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: system-ui, sans-serif;
-  background: #f5f6fa;
-  padding: 20px;
+  margin: 0;
+  padding: 24px;
+  font-family: Inter, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
 .card {
-  max-width: 420px;
+  max-width: 440px;
   margin: auto;
-  background: white;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  background: var(--card);
+  padding: 32px 28px;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
 }
 
 h1 {
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
   text-align: center;
-  margin-top: 0;
+  margin: 0;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--muted);
+  margin-top: 10px;
+  font-size: 0.95rem;
+}
+
+.divider {
+  width: 60px;
+  height: 2px;
+  background: var(--secondary);
+  margin: 22px auto;
+  border-radius: 2px;
 }
 
 label {
   display: block;
-  margin-top: 16px;
-  font-weight: 500;
+  margin-top: 18px;
+  font-size: 0.9rem;
 }
 
 input, select, button {
   width: 100%;
-  padding: 10px;
+  padding: 11px 12px;
   margin-top: 6px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
   font-size: 1rem;
+  font-family: inherit;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.error {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+
+.choice {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.choice button {
+  background: white;
+  color: var(--text);
+  border: 1px solid #d9d9d9;
+  cursor: pointer;
+}
+
+.choice button.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
 }
 
 .row {
@@ -47,15 +115,15 @@ input, select, button {
   gap: 12px;
 }
 
-button {
-  margin-top: 24px;
-  background: #2563eb;
+.submit {
+  margin-top: 26px;
+  background: var(--primary);
   color: white;
   border: none;
   cursor: pointer;
 }
 
-button:disabled {
+.submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -64,15 +132,25 @@ button:disabled {
   display: none;
 }
 
-.error {
-  border-color: #dc2626;
-  background: #fef2f2;
+#loading {
+  text-align: center;
+  margin-top: 14px;
+  color: var(--muted);
 }
 
-#loading {
-  margin-top: 12px;
-  color: #555;
+#thankYou {
   text-align: center;
+  animation: fadeIn 0.6s ease;
+}
+
+#thankYou h2 {
+  font-family: "Playfair Display", serif;
+  margin-bottom: 8px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>
 </head>
@@ -81,10 +159,11 @@ button:disabled {
 
 <div class="card">
 
-  <h1>Potvrzení účasti</h1>
+  <h1>Yumi slaví 1. narozeniny</h1>
+  <p class="subtitle">Budeme rádi, když s námi přijdete oslavit její první rok</p>
+  <div class="divider"></div>
 
-  <!-- FORM -->
-  <form id="rsvpForm" novalidate>
+  <form id="form">
 
     <label>
       Jméno a příjmení
@@ -92,12 +171,11 @@ button:disabled {
     </label>
 
     <label>
-      Zúčastníte se?
-      <select id="attending">
-        <option value="">-- vyberte --</option>
-        <option value="ANO">ANO</option>
-        <option value="NE">NE</option>
-      </select>
+      Můžeme se na vás těšit?
+      <div class="choice">
+        <button type="button" data-value="ANO">ANO</button>
+        <button type="button" data-value="NE">NE</button>
+      </div>
     </label>
 
     <div id="counts" class="hidden">
@@ -108,15 +186,14 @@ button:disabled {
       </div>
     </div>
 
-    <button type="submit" id="submitBtn">Odeslat</button>
-    <p id="loading" class="hidden">Odesílám odpověď…</p>
+    <button class="submit" id="submitBtn">Potvrdit účast</button>
+    <div id="loading" class="hidden">Odesíláme odpověď…</div>
 
   </form>
 
-  <!-- THANK YOU -->
   <div id="thankYou" class="hidden">
-    <h2>Děkujeme 💙</h2>
-    <p>Vaše odpověď byla úspěšně odeslána.</p>
+    <h2>Děkujeme 💛</h2>
+    <p>Moc se na vás těšíme.</p>
   </div>
 
 </div>
@@ -124,91 +201,59 @@ button:disabled {
 <script>
 const SCRIPT_URL = "https://rsvp-backend1.vercel.app/api/rsvp";
 
-const form = document.getElementById("rsvpForm");
+const form = document.getElementById("form");
 const thankYou = document.getElementById("thankYou");
-const attending = document.getElementById("attending");
 const counts = document.getElementById("counts");
+const loading = document.getElementById("loading");
+const submitBtn = document.getElementById("submitBtn");
 
 const nameInput = document.getElementById("name");
 const adultsInput = document.getElementById("adults");
 const childrenInput = document.getElementById("children");
 
-const submitBtn = document.getElementById("submitBtn");
-const loading = document.getElementById("loading");
+let attending = "";
 
-attending.addEventListener("change", () => {
-  counts.classList.toggle("hidden", attending.value !== "ANO");
+document.querySelectorAll(".choice button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".choice button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    attending = btn.dataset.value;
+    counts.classList.toggle("hidden", attending !== "ANO");
+  });
 });
 
 function clearErrors() {
-  [nameInput, attending, adultsInput, childrenInput].forEach(el => {
-    el.classList.remove("error");
-  });
+  [nameInput, adultsInput, childrenInput].forEach(el => el.classList.remove("error"));
 }
 
 function validate() {
   clearErrors();
-  let valid = true;
+  let ok = true;
 
   if (!nameInput.value.trim()) {
     nameInput.classList.add("error");
-    valid = false;
+    ok = false;
   }
 
-  if (!attending.value) {
-    attending.classList.add("error");
-    valid = false;
-  }
+  if (!attending) ok = false;
 
-  if (attending.value === "ANO") {
+  if (attending === "ANO") {
     if (adultsInput.value === "" || Number(adultsInput.value) < 1) {
       adultsInput.classList.add("error");
-      valid = false;
+      ok = false;
     }
-
     if (childrenInput.value === "") {
       childrenInput.classList.add("error");
-      valid = false;
+      ok = false;
     }
   }
 
-  return valid;
+  return ok;
 }
 
 form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  if (!validate()) return;
+  e.pr
 
-  submitBtn.disabled = true;
-  loading.classList.remove("hidden");
-
-  const data = {
-    name: nameInput.value.trim(),
-    attending: attending.value,
-    adults: attending.value === "ANO" ? Number(adultsInput.value) : 0,
-    children: attending.value === "ANO" ? Number(childrenInput.value) : 0
-  };
-
-  try {
-    const res = await fetch(SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
-
-    if (!res.ok) throw new Error();
-
-    form.classList.add("hidden");
-    loading.classList.add("hidden");
-    thankYou.classList.remove("hidden");
-
-  } catch {
-    loading.classList.add("hidden");
-    submitBtn.disabled = false;
-    alert("Chyba při odesílání.");
-  }
-});
-</script>
 
 </body>
 </html>
