@@ -216,11 +216,12 @@ form.addEventListener("submit", async e => {
   loading.classList.add("hidden");
   thanks.classList.remove("hidden");
 
-  // Zobrazíme zprávu podle ANO/NE
+ // Zobrazíme zprávu podle ANO/NE
   if (attendingInput.value === "ANO") {
-    thanksTitle.textContent = "Děkujeme za odpověď, budeme se tešit 💛";
+    thanksTitle.textContent = "Děkujeme za odpověď 💛";
+    thanksText.textContent = "Budeme se tešit.";
   } else {
-    thanksTitle.textContent = "Mrzí nás, že se tentokrát neuvidíme, ale děkujeme za odpověď 💛";
+    thanksTitle.textContent = "Mrzí nás, že se tentokrát neuvidíme, ale děkujeme za odpověď 💛.";
   }
 });
 </script>
