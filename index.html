@@ -1,236 +1,228 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8" />
-  <title>Yumi slaví 1 rok 🎉</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<title>Yumi slaví 1 rok 🎉</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #faf7f5;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-    }
+<style>
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #faf7f5;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
 
-    .card {
-      background: white;
-      max-width: 420px;
-      width: 100%;
-      padding: 24px;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-    }
+.card {
+  background: white;
+  max-width: 440px;
+  width: 100%;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
 
-    h1 {
-      text-align: center;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
+h1 {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
 
-    .subtitle {
-      text-align: center;
-      color: #666;
-      margin-bottom: 24px;
-    }
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 24px;
+}
 
-    label {
-      display: block;
-      margin-top: 16px;
-      margin-bottom: 6px;
-      font-weight: 500;
-    }
+label {
+  display: block;
+  margin-top: 16px;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
 
-    input {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      font-size: 16px;
-    }
+input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
 
-    input.error {
-      border-color: #e06666;
-      background: #fff5f5;
-    }
+input.error {
+  border-color: #e06666;
+  background: #fff5f5;
+}
 
-    .choice {
-      display: flex;
-      gap: 12px;
-      margin-top: 8px;
-    }
+.choice {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
 
-    .choice button {
-      flex: 1;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid #ddd;
-      background: #f6f6f6;
-      font-size: 16px;
-      cursor: pointer;
-    }
+.choice button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: #f6f6f6;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-    .choice button.active {
-      background: #d9e8e2;
-      border-color: #9ec5b6;
-      font-weight: 600;
-    }
+.choice button.active {
+  background: #d9e8e2;
+  border-color: #9ec5b6;
+  font-weight: 600;
+}
 
-    .hidden {
-      display: none;
-    }
+.hidden {
+  display: none;
+}
 
-    .submit {
-      margin-top: 24px;
-      width: 100%;
-      padding: 14px;
-      border-radius: 14px;
-      border: none;
-      font-size: 16px;
-      background: #9ec5b6;
-      cursor: pointer;
-    }
+.submit {
+  margin-top: 24px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  font-size: 16px;
+  background: #9ec5b6;
+  cursor: pointer;
+}
 
-    .submit:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+.submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
-    .loading {
-      text-align: center;
-      margin-top: 12px;
-      color: #666;
-    }
+.loading {
+  text-align: center;
+  margin-top: 12px;
+  color: #666;
+}
 
-    .thanks {
-      text-align: center;
-    }
+.thanks {
+  text-align: center;
+}
 
-    .thanks h2 {
-      margin-bottom: 12px;
-    }
-  </style>
+.thanks h2 {
+  margin-bottom: 12px;
+}
+</style>
 </head>
 
 <body>
-  <div class="card">
+<div class="card">
 
-    <!-- FORM -->
-    <form id="form">
-      <h1>Yumi slaví 1 rok 🎂</h1>
-      <div class="subtitle">Dáme vědět, jestli dorazíš?</div>
+  <form id="form">
+    <h1>Yumi slaví 1 rok 🎂</h1>
+    <div class="subtitle">Prosíme o potvrzení účasti</div>
 
-      <label>Jméno</label>
-      <input id="name" type="text" />
+    <label>Jméno</label>
+    <input id="name" type="text" />
 
-      <label>Přijdeš?</label>
-      <div class="choice">
-        <button data-value="ANO">ANO</button>
-        <button data-value="NE">NE</button>
-      </div>
-
-      <input type="hidden" id="attending" value="">
-
-      <div id="counts" class="hidden">
-        <label>Počet dospělých</label>
-        <input id="adults" type="number" min="1" />
-
-        <label>Počet dětí</label>
-        <input id="children" type="number" min="0" />
-      </div>
-
-      <button class="submit" type="submit">Odeslat</button>
-      <div id="loading" class="loading hidden">Odesílám…</div>
-    </form>
-
-    <!-- THANK YOU -->
-    <div id="thanks" class="thanks hidden">
-      <h2>Děkujeme 💛</h2>
-      <p>Tvoje odpověď byla úspěšně odeslána.</p>
+    <label>Zúčastníte se?</label>
+    <div class="choice">
+      <button data-value="ANO">ANO</button>
+      <button data-value="NE">NE</button>
     </div>
 
+    <input type="hidden" id="attending" value="">
+
+    <div id="counts" class="hidden">
+      <label>Počet dospělých</label>
+      <input id="adults" type="number" min="1" />
+
+      <label>Počet dětí</label>
+      <input id="children" type="number" min="0" />
+    </div>
+
+    <button class="submit" type="submit">Odeslat</button>
+    <div id="loading" class="loading hidden">Odesílám…</div>
+  </form>
+
+  <div id="thanks" class="thanks hidden">
+    <h2 id="thanksTitle"></h2>
+    <p id="thanksText"></p>
   </div>
 
-  <script>
-    const BACKEND_URL = "https://rsvp-backend1.vercel.app/api/rsvp";
+</div>
 
-    const form = document.getElementById("form");
-    const thanks = document.getElementById("thanks");
-    const loading = document.getElementById("loading");
+<script>
+const BACKEND_URL = "https://rsvp-backend1.vercel.app/api/rsvp";
 
-    const nameInput = document.getElementById("name");
-    const attendingInput = document.getElementById("attending");
-    const adultsInput = document.getElementById("adults");
-    const childrenInput = document.getElementById("children");
-    const counts = document.getElementById("counts");
+const form = document.getElementById("form");
+const thanks = document.getElementById("thanks");
+const thanksTitle = document.getElementById("thanksTitle");
+const thanksText = document.getElementById("thanksText");
+const loading = document.getElementById("loading");
 
-    document.querySelectorAll(".choice button").forEach(btn => {
-      btn.addEventListener("click", e => {
-        e.preventDefault();
+const nameInput = document.getElementById("name");
+const attendingInput = document.getElementById("attending");
+const adultsInput = document.getElementById("adults");
+const childrenInput = document.getElementById("children");
+const counts = document.getElementById("counts");
 
-        document.querySelectorAll(".choice button")
-          .forEach(b => b.classList.remove("active"));
+document.querySelectorAll(".choice button").forEach(btn => {
+  btn.addEventListener("click", e => {
+    e.preventDefault();
 
-        btn.classList.add("active");
-        attendingInput.value = btn.dataset.value;
+    document.querySelectorAll(".choice button")
+      .forEach(b => b.classList.remove("active"));
 
-        counts.classList.toggle("hidden", attendingInput.value !== "ANO");
-      });
-    });
+    btn.classList.add("active");
+    attendingInput.value = btn.dataset.value;
 
-    function validate() {
-      let ok = true;
+    counts.classList.toggle("hidden", attendingInput.value !== "ANO");
+  });
+});
 
-      [nameInput, adultsInput, childrenInput].forEach(i => i.classList.remove("error"));
+function validate() {
+  let ok = true;
+  [nameInput, adultsInput, childrenInput].forEach(i => i.classList.remove("error"));
 
-      if (!nameInput.value.trim()) {
-        nameInput.classList.add("error");
-        ok = false;
-      }
+  if (!nameInput.value.trim()) { nameInput.classList.add("error"); ok = false; }
+  if (!attendingInput.value) ok = false;
 
-      if (!attendingInput.value) {
-        ok = false;
-      }
+  if (attendingInput.value === "ANO") {
+    if (adultsInput.value === "" || Number(adultsInput.value) < 1) { adultsInput.classList.add("error"); ok = false; }
+    if (childrenInput.value === "") { childrenInput.classList.add("error"); ok = false; }
+  }
 
-      if (attendingInput.value === "ANO") {
-        if (adultsInput.value === "" || Number(adultsInput.value) < 1) {
-          adultsInput.classList.add("error");
-          ok = false;
-        }
+  return ok;
+}
 
-        if (childrenInput.value === "") {
-          childrenInput.classList.add("error");
-          ok = false;
-        }
-      }
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!validate()) return;
 
-      return ok;
-    }
+  loading.classList.remove("hidden");
 
-    form.addEventListener("submit", async e => {
-      e.preventDefault();
-      if (!validate()) return;
+  await fetch(BACKEND_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: nameInput.value.trim(),
+      attending: attendingInput.value,
+      adults: attendingInput.value === "ANO" ? Number(adultsInput.value) : 0,
+      children: attendingInput.value === "ANO" ? Number(childrenInput.value) : 0
+    })
+  });
 
-      loading.classList.remove("hidden");
+  form.classList.add("hidden");
+  loading.classList.add("hidden");
+  thanks.classList.remove("hidden");
 
-      await fetch(BACKEND_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: nameInput.value.trim(),
-          attending: attendingInput.value,
-          adults: attendingInput.value === "ANO" ? Number(adultsInput.value) : 0,
-          children: attendingInput.value === "ANO" ? Number(childrenInput.value) : 0
-        })
-      });
-
-      form.classList.add("hidden");
-      loading.classList.add("hidden");
-      thanks.classList.remove("hidden");
-    });
-  </script>
+  // Zobrazíme zprávu podle ANO/NE
+  if (attendingInput.value === "ANO") {
+    thanksTitle.textContent = "Děkujeme za odpověď, budeme se tešit 💛";
+  } else {
+    thanksTitle.textContent = "Mrzí nás, že se tentokrát neuvidíme, ale děkujeme za odpověď 💛";
+  }
+});
+</script>
 </body>
 </html>
-
