@@ -6,6 +6,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
+/* Globální box-sizing */
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background: #faf7f5;
@@ -49,6 +54,7 @@ input {
   border-radius: 10px;
   border: 1px solid #ddd;
   font-size: 16px;
+  box-sizing: border-box;
 }
 
 input.error {
@@ -111,12 +117,26 @@ input.error {
 .thanks h2 {
   margin-bottom: 12px;
 }
+
+/* Počet dospělých a dětí vedle sebe */
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.row input {
+  text-align: center;
+  padding: 8px;
+}
 </style>
 </head>
 
 <body>
 <div class="card">
 
+  <!-- FORM -->
   <form id="form">
     <h1>Yumi slaví 1 rok 🎂</h1>
     <div class="subtitle">Prosíme o potvrzení účasti</div>
@@ -124,7 +144,7 @@ input.error {
     <label>Jméno</label>
     <input id="name" type="text" />
 
-    <label>Zúčastníte se?</label>
+    <label>Přijdeš?</label>
     <div class="choice">
       <button data-value="ANO">ANO</button>
       <button data-value="NE">NE</button>
@@ -133,17 +153,18 @@ input.error {
     <input type="hidden" id="attending" value="">
 
     <div id="counts" class="hidden">
-      <label>Počet dospělých</label>
-      <input id="adults" type="number" min="1" />
-
-      <label>Počet dětí</label>
-      <input id="children" type="number" min="0" />
+      <label>Počet osob</label>
+      <div class="row">
+        <input id="adults" type="number" min="1" placeholder="Dospělí" />
+        <input id="children" type="number" min="0" placeholder="Děti" />
+      </div>
     </div>
 
     <button class="submit" type="submit">Odeslat</button>
     <div id="loading" class="loading hidden">Odesílám…</div>
   </form>
 
+  <!-- THANK YOU -->
   <div id="thanks" class="thanks hidden">
     <h2 id="thanksTitle"></h2>
     <p id="thanksText"></p>
@@ -216,14 +237,14 @@ form.addEventListener("submit", async e => {
   loading.classList.add("hidden");
   thanks.classList.remove("hidden");
 
- // Zobrazíme zprávu podle ANO/NE
   if (attendingInput.value === "ANO") {
-    thanksTitle.textContent = "Děkujeme za odpověď 💛";
+    thanksTitle.textContent = "Děkujeme 💛";
     thanksText.textContent = "Budeme se tešit.";
   } else {
-    thanksTitle.textContent = "Mrzí nás, že se tentokrát neuvidíme, ale děkujeme za odpověď 💛.";
+    thanksTitle.textContent = "Mrzí nás, že se tentokrát neuvidíme, ale děkujeme za odpověď 💛";
   }
 });
 </script>
 </body>
 </html>
+
