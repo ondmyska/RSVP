@@ -1,259 +1,236 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-<meta charset="UTF-8">
-<title>Yumi slaví 1. narozeniny</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>Yumi slaví 1 rok 🎉</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #faf7f5;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
 
-<style>
-:root {
-  --bg: #FAF9F7;
-  --card: #FFFFFF;
-  --primary: #8FAEA0;
-  --secondary: #F2C9B6;
-  --text: #2F2F2F;
-  --muted: #6B6B6B;
-}
+    .card {
+      background: white;
+      max-width: 420px;
+      width: 100%;
+      padding: 24px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
 
-* {
-  box-sizing: border-box;
-}
+    h1 {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
 
-body {
-  margin: 0;
-  padding: 24px;
-  font-family: Inter, system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-}
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 24px;
+    }
 
-.card {
-  max-width: 440px;
-  margin: auto;
-  background: var(--card);
-  padding: 32px 28px;
-  border-radius: 18px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
-}
+    label {
+      display: block;
+      margin-top: 16px;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
 
-h1 {
-  font-family: "Playfair Display", serif;
-  font-weight: 600;
-  text-align: center;
-  margin: 0;
-}
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+    }
 
-.subtitle {
-  text-align: center;
-  color: var(--muted);
-  margin-top: 10px;
-  font-size: 0.95rem;
-}
+    input.error {
+      border-color: #e06666;
+      background: #fff5f5;
+    }
 
-.divider {
-  width: 60px;
-  height: 2px;
-  background: var(--secondary);
-  margin: 22px auto;
-  border-radius: 2px;
-}
+    .choice {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
 
-label {
-  display: block;
-  margin-top: 18px;
-  font-size: 0.9rem;
-}
+    .choice button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      background: #f6f6f6;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-input, select, button {
-  width: 100%;
-  padding: 11px 12px;
-  margin-top: 6px;
-  border-radius: 10px;
-  border: 1px solid #d9d9d9;
-  font-size: 1rem;
-  font-family: inherit;
-}
+    .choice button.active {
+      background: #d9e8e2;
+      border-color: #9ec5b6;
+      font-weight: 600;
+    }
 
-input:focus, select:focus {
-  outline: none;
-  border-color: var(--primary);
-}
+    .hidden {
+      display: none;
+    }
 
-.error {
-  border-color: #dc2626;
-  background: #fef2f2;
-}
+    .submit {
+      margin-top: 24px;
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      font-size: 16px;
+      background: #9ec5b6;
+      cursor: pointer;
+    }
 
-.choice {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 6px;
-}
+    .submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
 
-.choice button {
-  background: white;
-  color: var(--text);
-  border: 1px solid #d9d9d9;
-  cursor: pointer;
-}
+    .loading {
+      text-align: center;
+      margin-top: 12px;
+      color: #666;
+    }
 
-.choice button.active {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-}
+    .thanks {
+      text-align: center;
+    }
 
-.row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.submit {
-  margin-top: 26px;
-  background: var(--primary);
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.submit:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.hidden {
-  display: none;
-}
-
-#loading {
-  text-align: center;
-  margin-top: 14px;
-  color: var(--muted);
-}
-
-#thankYou {
-  text-align: center;
-  animation: fadeIn 0.6s ease;
-}
-
-#thankYou h2 {
-  font-family: "Playfair Display", serif;
-  margin-bottom: 8px;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-</style>
+    .thanks h2 {
+      margin-bottom: 12px;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="card">
 
-<div class="card">
+    <!-- FORM -->
+    <form id="form">
+      <h1>Yumi slaví 1 rok 🎂</h1>
+      <div class="subtitle">Dáme vědět, jestli dorazíš?</div>
 
-  <h1>Yumi slaví 1. narozeniny</h1>
-  <p class="subtitle">Budeme rádi, když s námi přijdete oslavit její první rok</p>
-  <div class="divider"></div>
+      <label>Jméno</label>
+      <input id="name" type="text" />
 
-  <form id="form">
-
-    <label>
-      Jméno a příjmení
-      <input type="text" id="name">
-    </label>
-
-    <label>
-      Můžeme se na vás těšit?
+      <label>Přijdeš?</label>
       <div class="choice">
-        <button type="button" data-value="ANO">ANO</button>
-        <button type="button" data-value="NE">NE</button>
+        <button data-value="ANO">ANO</button>
+        <button data-value="NE">NE</button>
       </div>
-    </label>
 
-    <div id="counts" class="hidden">
-      <label>Počet osob</label>
-      <div class="row">
-        <input type="number" id="adults" min="1" placeholder="Dospělí">
-        <input type="number" id="children" min="0" placeholder="Děti">
+      <input type="hidden" id="attending" value="">
+
+      <div id="counts" class="hidden">
+        <label>Počet dospělých</label>
+        <input id="adults" type="number" min="1" />
+
+        <label>Počet dětí</label>
+        <input id="children" type="number" min="0" />
       </div>
+
+      <button class="submit" type="submit">Odeslat</button>
+      <div id="loading" class="loading hidden">Odesílám…</div>
+    </form>
+
+    <!-- THANK YOU -->
+    <div id="thanks" class="thanks hidden">
+      <h2>Děkujeme 💛</h2>
+      <p>Tvoje odpověď byla úspěšně odeslána.</p>
     </div>
 
-    <button class="submit" id="submitBtn">Potvrdit účast</button>
-    <div id="loading" class="hidden">Odesíláme odpověď…</div>
-
-  </form>
-
-  <div id="thankYou" class="hidden">
-    <h2>Děkujeme 💛</h2>
-    <p>Moc se na vás těšíme.</p>
   </div>
 
-</div>
+  <script>
+    const BACKEND_URL = "https://rsvp-backend1.vercel.app/api/rsvp";
 
-<script>
-const SCRIPT_URL = "https://rsvp-backend1.vercel.app/api/rsvp";
+    const form = document.getElementById("form");
+    const thanks = document.getElementById("thanks");
+    const loading = document.getElementById("loading");
 
-const form = document.getElementById("form");
-const thankYou = document.getElementById("thankYou");
-const counts = document.getElementById("counts");
-const loading = document.getElementById("loading");
-const submitBtn = document.getElementById("submitBtn");
+    const nameInput = document.getElementById("name");
+    const attendingInput = document.getElementById("attending");
+    const adultsInput = document.getElementById("adults");
+    const childrenInput = document.getElementById("children");
+    const counts = document.getElementById("counts");
 
-const nameInput = document.getElementById("name");
-const adultsInput = document.getElementById("adults");
-const childrenInput = document.getElementById("children");
+    document.querySelectorAll(".choice button").forEach(btn => {
+      btn.addEventListener("click", e => {
+        e.preventDefault();
 
-let attending = "";
+        document.querySelectorAll(".choice button")
+          .forEach(b => b.classList.remove("active"));
 
-document.querySelectorAll(".choice button").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".choice button").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    attending = btn.dataset.value;
-    counts.classList.toggle("hidden", attending !== "ANO");
-  });
-});
+        btn.classList.add("active");
+        attendingInput.value = btn.dataset.value;
 
-function clearErrors() {
-  [nameInput, adultsInput, childrenInput].forEach(el => el.classList.remove("error"));
-}
+        counts.classList.toggle("hidden", attendingInput.value !== "ANO");
+      });
+    });
 
-function validate() {
-  clearErrors();
-  let ok = true;
+    function validate() {
+      let ok = true;
 
-  if (!nameInput.value.trim()) {
-    nameInput.classList.add("error");
-    ok = false;
-  }
+      [nameInput, adultsInput, childrenInput].forEach(i => i.classList.remove("error"));
 
-  if (!attending) ok = false;
+      if (!nameInput.value.trim()) {
+        nameInput.classList.add("error");
+        ok = false;
+      }
 
-  if (attending === "ANO") {
-    if (adultsInput.value === "" || Number(adultsInput.value) < 1) {
-      adultsInput.classList.add("error");
-      ok = false;
+      if (!attendingInput.value) {
+        ok = false;
+      }
+
+      if (attendingInput.value === "ANO") {
+        if (adultsInput.value === "" || Number(adultsInput.value) < 1) {
+          adultsInput.classList.add("error");
+          ok = false;
+        }
+
+        if (childrenInput.value === "") {
+          childrenInput.classList.add("error");
+          ok = false;
+        }
+      }
+
+      return ok;
     }
-    if (childrenInput.value === "") {
-      childrenInput.classList.add("error");
-      ok = false;
-    }
-  }
 
-  return ok;
-}
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      if (!validate()) return;
 
-form.addEventListener("submit", async (e) => {
-  e.pr
+      loading.classList.remove("hidden");
 
+      await fetch(BACKEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: nameInput.value.trim(),
+          attending: attendingInput.value,
+          adults: attendingInput.value === "ANO" ? Number(adultsInput.value) : 0,
+          children: attendingInput.value === "ANO" ? Number(childrenInput.value) : 0
+        })
+      });
 
+      form.classList.add("hidden");
+      loading.classList.add("hidden");
+      thanks.classList.remove("hidden");
+    });
+  </script>
 </body>
 </html>
+
