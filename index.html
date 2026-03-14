@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>Yumi slaví 1 rok 🎉</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 
@@ -122,6 +122,24 @@ color:#666;
 text-align:center;
 }
 
+.yumi-photo{
+width:120px;
+height:120px;
+object-fit:cover;
+border-radius:50%;
+margin-bottom:16px;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+
+#confetti{
+position:fixed;
+left:0;
+top:0;
+width:100%;
+height:100%;
+pointer-events:none;
+}
+
 </style>
 </head>
 
@@ -169,12 +187,18 @@ Odesílám…
 
 <div id="thanks" class="thanks hidden">
 
+<img class="yumi-photo" src="yumi.jpg" alt="Yumi">
+
 <h2 id="thanksTitle"></h2>
 <p id="thanksText"></p>
 
+<canvas id="confetti"></canvas>
+
 </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
 
@@ -250,6 +274,35 @@ return ok;
 
 }
 
+function launchConfetti(){
+
+const duration=1500;
+const end=Date.now()+duration;
+
+(function frame(){
+
+confetti({
+particleCount:4,
+angle:60,
+spread:55,
+origin:{x:0}
+});
+
+confetti({
+particleCount:4,
+angle:120,
+spread:55,
+origin:{x:1}
+});
+
+if(Date.now()<end){
+requestAnimationFrame(frame);
+}
+
+}());
+
+}
+
 form.addEventListener("submit",async e=>{
 
 e.preventDefault();
@@ -258,7 +311,6 @@ if(!validate())return;
 
 loading.classList.remove("hidden");
 
-/* zde se tlačítko deaktivuje */
 submitBtn.disabled=true;
 
 await fetch(BACKEND_URL,{
@@ -280,6 +332,8 @@ form.classList.add("hidden");
 loading.classList.add("hidden");
 thanks.classList.remove("hidden");
 
+launchConfetti();
+
 if(attendingInput.value==="ANO"){
 
 thanksTitle.textContent="Děkujeme 💛";
@@ -298,4 +352,3 @@ thanksText.textContent="Mrzí nás, že se tentokrát neuvidíme, ale děkujeme 
 
 </body>
 </html>
-
