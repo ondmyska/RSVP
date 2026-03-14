@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Yumi slaví 1 rok 🎉</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
 *{box-sizing:border-box;}
 body{
@@ -16,7 +15,6 @@ body{
   justify-content:center;
   position:relative;
 }
-
 .card{
   background:white;
   max-width:440px;
@@ -27,14 +25,11 @@ body{
   position:relative;
   z-index:1;
 }
-
 h1{text-align:center;margin-bottom:6px;}
 .subtitle{text-align:center;color:#666;margin-bottom:26px;}
-
 label{display:block;margin-top:16px;margin-bottom:6px;font-weight:500;}
 input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #ddd;font-size:16px;}
 input.error{border-color:#e06666;background:#fff5f5;}
-
 .choice{display:flex;gap:12px;}
 .choice button{
   flex:1;padding:12px;border-radius:12px;border:1px solid #ddd;
@@ -43,41 +38,30 @@ input.error{border-color:#e06666;background:#fff5f5;}
 .choice button.active{
   background:#d9e8e2;border-color:#9ec5b6;font-weight:600;
 }
-
 .hidden{display:none;}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .row input{text-align:center;}
-
 .submit{
   margin-top:24px;width:100%;padding:14px;border-radius:14px;border:none;
   font-size:16px;background:#9ec5b6;cursor:pointer;transition:opacity .2s;
 }
 .submit:disabled{opacity:0.45;cursor:not-allowed;}
-
 .loading{text-align:center;margin-top:12px;color:#666;}
 .thanks{text-align:center;}
-
-/* kruh pro fotku */
 .photo-frame{
   width:260px;height:260px;border-radius:50%;overflow:hidden;
   margin:0 auto 26px auto;box-shadow:0 14px 32px rgba(0,0,0,0.2);
   display:none;
 }
-
-/* obrázek větší než kruh a posun */
 .photo-frame img{
   width:270px;
   height:270px;
   object-fit:cover;
   transform:translate(-1px,-1px);
 }
-
-/* konfeti */
 #confetti{
   position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;
 }
-
-/* sakura lístky */
 #sakura-container{
   position:fixed;
   top:0; left:0;
@@ -93,35 +77,31 @@ input.error{border-color:#e06666;background:#fff5f5;}
   background: url('sakura.png') no-repeat center/contain;
   opacity:0.8;
 }
-
-/* animace padání lístků s horizontální vlnou */
-@keyframes fall {
-  0% { transform: translateY(-50px) translateX(0px) rotate(0deg); }
-  50% { transform: translateY(50vh) translateX(20px) rotate(180deg); }
-  100% { transform: translateY(110vh) translateX(0px) rotate(360deg); }
+/* animace padání s horizontálním kýváním sinusoidou */
+@keyframes fallWave {
+  0% { transform: translateY(-50px) translateX(0px) rotate(0deg);}
+  25% { transform: translateY(25vh) translateX(15px) rotate(90deg);}
+  50% { transform: translateY(50vh) translateX(0px) rotate(180deg);}
+  75% { transform: translateY(75vh) translateX(-15px) rotate(270deg);}
+  100% { transform: translateY(110vh) translateX(0px) rotate(360deg);}
 }
 </style>
 </head>
-
 <body>
 <div id="sakura-container"></div>
 
 <div class="card">
-
 <form id="form">
 <h1>Yumi slaví 1 rok 🎂</h1>
 <div class="subtitle">Prosíme o potvrzení účasti</div>
-
 <label>Jméno a příjmení</label>
 <input id="name" type="text">
-
 <label>Přijdeš?</label>
 <div class="choice">
   <button data-value="ANO">ANO</button>
   <button data-value="NE">NE</button>
 </div>
 <input type="hidden" id="attending">
-
 <div id="counts" class="hidden">
 <label>Počet osob</label>
 <div class="row">
@@ -129,7 +109,6 @@ input.error{border-color:#e06666;background:#fff5f5;}
   <input id="children" type="number" min="0" placeholder="Děti">
 </div>
 </div>
-
 <button class="submit" id="submitBtn" type="submit">Odeslat</button>
 <div id="loading" class="loading hidden">Odesílám…</div>
 </form>
@@ -142,25 +121,21 @@ input.error{border-color:#e06666;background:#fff5f5;}
 <p id="thanksText"></p>
 <canvas id="confetti"></canvas>
 </div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
 const BACKEND_URL="https://rsvp-backend1.vercel.app/api/rsvp";
-
 const form=document.getElementById("form");
 const thanks=document.getElementById("thanks");
 const thanksTitle=document.getElementById("thanksTitle");
 const thanksText=document.getElementById("thanksText");
 const loading=document.getElementById("loading");
-
 const nameInput=document.getElementById("name");
 const attendingInput=document.getElementById("attending");
 const adultsInput=document.getElementById("adults");
 const childrenInput=document.getElementById("children");
 const counts=document.getElementById("counts");
-
 const submitBtn=document.getElementById("submitBtn");
 const photoFrame=document.getElementById("photoFrame");
 
@@ -196,15 +171,15 @@ function launchConfetti(){
   }());
 }
 
-// generování sakura lístků s horizontální vlnou
+// sakura lístky s horizontální vlnou
 const sakuraContainer = document.getElementById('sakura-container');
 for(let i=0;i<12;i++){
   const leaf=document.createElement('div');
   leaf.classList.add('sakura');
   leaf.style.left=Math.random()*100+'vw';
-  const duration = 4 + Math.random()*6;
-  leaf.style.animation=`fall ${duration}s linear infinite`;
-  leaf.style.animationDelay=Math.random()*6+'s';
+  const duration = 5 + Math.random()*5;
+  leaf.style.animation=`fallWave ${duration}s linear infinite`;
+  leaf.style.animationDelay=Math.random()*5+'s';
   leaf.style.transform = `rotate(${Math.random()*360}deg) scale(${0.6+Math.random()*0.4})`;
   sakuraContainer.appendChild(leaf);
 }
@@ -241,7 +216,6 @@ if(attendingInput.value==="ANO"){
   thanksTitle.textContent="";
   thanksText.textContent="Mrzí nás, že se tentokrát neuvidíme, ale děkujeme za odpověď 💛";
 }
-
 });
 </script>
 </body>
