@@ -94,10 +94,11 @@ input.error{border-color:#e06666;background:#fff5f5;}
   opacity:0.8;
 }
 
-/* animace padání lístků */
+/* animace padání lístků s horizontální vlnou */
 @keyframes fall {
-  0% { transform: translateY(-50px) rotate(0deg); }
-  100% { transform: translateY(110vh) rotate(360deg); }
+  0% { transform: translateY(-50px) translateX(0px) rotate(0deg); }
+  50% { transform: translateY(50vh) translateX(20px) rotate(180deg); }
+  100% { transform: translateY(110vh) translateX(0px) rotate(360deg); }
 }
 </style>
 </head>
@@ -195,13 +196,13 @@ function launchConfetti(){
   }());
 }
 
-// generování sakura lístků
+// generování sakura lístků s horizontální vlnou
 const sakuraContainer = document.getElementById('sakura-container');
 for(let i=0;i<12;i++){
   const leaf=document.createElement('div');
   leaf.classList.add('sakura');
   leaf.style.left=Math.random()*100+'vw';
-  const duration = 4 + Math.random()*6; // 4-10s
+  const duration = 4 + Math.random()*6;
   leaf.style.animation=`fall ${duration}s linear infinite`;
   leaf.style.animationDelay=Math.random()*6+'s';
   leaf.style.transform = `rotate(${Math.random()*360}deg) scale(${0.6+Math.random()*0.4})`;
