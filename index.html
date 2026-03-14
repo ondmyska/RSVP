@@ -123,13 +123,13 @@ text-align:center;
 }
 
 .yumi-photo{
-width:180px;
-height:180px;
+width:240px;
+height:240px;
 object-fit:cover;
-object-position:center;
+object-position:50% 35%;
 border-radius:50%;
 display:block;
-margin:0 auto 20px auto;
+margin:0 auto 24px auto;
 box-shadow:0 12px 30px rgba(0,0,0,0.18);
 }
 
@@ -189,7 +189,7 @@ Odesílám…
 
 <div id="thanks" class="thanks hidden">
 
-<img class="yumi-photo" src="yumi.jpg" alt="Yumi">
+<img id="yumiPhoto" class="yumi-photo hidden" src="yumi.jpg" alt="Yumi">
 
 <h2 id="thanksTitle"></h2>
 <p id="thanksText"></p>
@@ -334,16 +334,22 @@ form.classList.add("hidden");
 loading.classList.add("hidden");
 thanks.classList.remove("hidden");
 
-launchConfetti();
+const photo=document.getElementById("yumiPhoto");
 
 if(attendingInput.value==="ANO"){
+
+photo.classList.remove("hidden");
+
+launchConfetti();
 
 thanksTitle.textContent="Děkujeme 💛";
 thanksText.textContent="Moc se na vás těšíme.";
 
 }else{
 
-thanksTitle.textContent="Děkujeme 💛";
+photo.classList.add("hidden");
+
+thanksTitle.textContent="";
 thanksText.textContent="Mrzí nás, že se tentokrát neuvidíme, ale děkujeme za odpověď 💛";
 
 }
