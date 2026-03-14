@@ -24,7 +24,7 @@ justify-content:center;
 background:white;
 max-width:440px;
 width:100%;
-padding:24px;
+padding:26px;
 border-radius:20px;
 box-shadow:0 20px 40px rgba(0,0,0,0.08);
 }
@@ -37,7 +37,7 @@ margin-bottom:6px;
 .subtitle{
 text-align:center;
 color:#666;
-margin-bottom:24px;
+margin-bottom:26px;
 }
 
 label{
@@ -122,21 +122,30 @@ color:#666;
 text-align:center;
 }
 
-/* fotka Yumi */
+/* kruh pro fotku */
 
-.yumi-photo{
+.photo-frame{
 width:260px;
 height:260px;
-object-fit:cover;
 border-radius:50%;
-display:block;
-margin:0 auto 24px auto;
-box-shadow:0 12px 30px rgba(0,0,0,0.18);
-transform:translate(-10%,-10%);
+overflow:hidden;
+margin:0 auto 26px auto;
+box-shadow:0 14px 32px rgba(0,0,0,0.2);
 display:none;
 }
 
-/* konfeti canvas */
+/* obrázek větší než kruh */
+
+.photo-frame img{
+width:320px;
+height:320px;
+object-fit:cover;
+
+/* POSUN OBLIČEJE */
+transform:translate(-40px,-30px);
+}
+
+/* konfeti */
 
 #confetti{
 position:fixed;
@@ -194,7 +203,9 @@ Odesílám…
 
 <div id="thanks" class="thanks hidden">
 
-<img id="yumiPhoto" class="yumi-photo" src="yumi.jpg" alt="Yumi">
+<div id="photoFrame" class="photo-frame">
+<img src="yumi.jpg">
+</div>
 
 <h2 id="thanksTitle"></h2>
 <p id="thanksText"></p>
@@ -224,7 +235,7 @@ const childrenInput=document.getElementById("children");
 const counts=document.getElementById("counts");
 
 const submitBtn=document.getElementById("submitBtn");
-const photo=document.getElementById("yumiPhoto");
+const photoFrame=document.getElementById("photoFrame");
 
 document.querySelectorAll(".choice button").forEach(btn=>{
 
@@ -318,7 +329,6 @@ e.preventDefault();
 if(!validate())return;
 
 loading.classList.remove("hidden");
-
 submitBtn.disabled=true;
 
 await fetch(BACKEND_URL,{
@@ -342,7 +352,7 @@ thanks.classList.remove("hidden");
 
 if(attendingInput.value==="ANO"){
 
-photo.style.display="block";
+photoFrame.style.display="block";
 
 launchConfetti();
 
@@ -351,7 +361,7 @@ thanksText.textContent="Moc se na vás těšíme.";
 
 }else{
 
-photo.style.display="none";
+photoFrame.style.display="none";
 
 thanksTitle.textContent="";
 thanksText.textContent="Mrzí nás, že se tentokrát neuvidíme, ale děkujeme za odpověď 💛";
