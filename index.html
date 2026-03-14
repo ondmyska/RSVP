@@ -122,16 +122,21 @@ color:#666;
 text-align:center;
 }
 
+/* fotka Yumi */
+
 .yumi-photo{
-width:240px;
-height:240px;
+width:260px;
+height:260px;
 object-fit:cover;
-object-position:50% 35%;
 border-radius:50%;
 display:block;
 margin:0 auto 24px auto;
 box-shadow:0 12px 30px rgba(0,0,0,0.18);
+transform:translate(-10%,-10%);
+display:none;
 }
+
+/* konfeti canvas */
 
 #confetti{
 position:fixed;
@@ -189,7 +194,7 @@ Odesílám…
 
 <div id="thanks" class="thanks hidden">
 
-<img id="yumiPhoto" class="yumi-photo hidden" src="yumi.jpg" alt="Yumi">
+<img id="yumiPhoto" class="yumi-photo" src="yumi.jpg" alt="Yumi">
 
 <h2 id="thanksTitle"></h2>
 <p id="thanksText"></p>
@@ -219,6 +224,7 @@ const childrenInput=document.getElementById("children");
 const counts=document.getElementById("counts");
 
 const submitBtn=document.getElementById("submitBtn");
+const photo=document.getElementById("yumiPhoto");
 
 document.querySelectorAll(".choice button").forEach(btn=>{
 
@@ -334,11 +340,9 @@ form.classList.add("hidden");
 loading.classList.add("hidden");
 thanks.classList.remove("hidden");
 
-const photo=document.getElementById("yumiPhoto");
-
 if(attendingInput.value==="ANO"){
 
-photo.classList.remove("hidden");
+photo.style.display="block";
 
 launchConfetti();
 
@@ -347,7 +351,7 @@ thanksText.textContent="Moc se na vás těšíme.";
 
 }else{
 
-photo.classList.add("hidden");
+photo.style.display="none";
 
 thanksTitle.textContent="";
 thanksText.textContent="Mrzí nás, že se tentokrát neuvidíme, ale děkujeme za odpověď 💛";
