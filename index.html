@@ -6,165 +6,80 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-
-*{
-box-sizing:border-box;
-}
-
+*{box-sizing:border-box;}
 body{
-font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
-background:#faf7f5;
-margin:0;
-padding:20px;
-display:flex;
-justify-content:center;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  background:#faf7f5;
+  margin:0;
+  padding:20px;
+  display:flex;
+  justify-content:center;
 }
 
 .card{
-background:white;
-max-width:440px;
-width:100%;
-padding:26px;
-border-radius:20px;
-box-shadow:0 20px 40px rgba(0,0,0,0.08);
+  background:white;
+  max-width:440px;
+  width:100%;
+  padding:26px;
+  border-radius:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.08);
 }
 
-h1{
-text-align:center;
-margin-bottom:6px;
-}
+h1{text-align:center;margin-bottom:6px;}
+.subtitle{text-align:center;color:#666;margin-bottom:26px;}
 
-.subtitle{
-text-align:center;
-color:#666;
-margin-bottom:26px;
-}
+label{display:block;margin-top:16px;margin-bottom:6px;font-weight:500;}
+input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #ddd;font-size:16px;}
+input.error{border-color:#e06666;background:#fff5f5;}
 
-label{
-display:block;
-margin-top:16px;
-margin-bottom:6px;
-font-weight:500;
-}
-
-input{
-width:100%;
-padding:10px 12px;
-border-radius:10px;
-border:1px solid #ddd;
-font-size:16px;
-}
-
-input.error{
-border-color:#e06666;
-background:#fff5f5;
-}
-
-.choice{
-display:flex;
-gap:12px;
-}
-
+.choice{display:flex;gap:12px;}
 .choice button{
-flex:1;
-padding:12px;
-border-radius:12px;
-border:1px solid #ddd;
-background:#f6f6f6;
-font-size:16px;
-cursor:pointer;
+  flex:1;padding:12px;border-radius:12px;border:1px solid #ddd;
+  background:#f6f6f6;font-size:16px;cursor:pointer;
 }
-
 .choice button.active{
-background:#d9e8e2;
-border-color:#9ec5b6;
-font-weight:600;
+  background:#d9e8e2;border-color:#9ec5b6;font-weight:600;
 }
 
-.hidden{
-display:none;
-}
-
-.row{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-}
-
-.row input{
-text-align:center;
-}
+.hidden{display:none;}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.row input{text-align:center;}
 
 .submit{
-margin-top:24px;
-width:100%;
-padding:14px;
-border-radius:14px;
-border:none;
-font-size:16px;
-background:#9ec5b6;
-cursor:pointer;
-transition:opacity .2s;
+  margin-top:24px;width:100%;padding:14px;border-radius:14px;border:none;
+  font-size:16px;background:#9ec5b6;cursor:pointer;transition:opacity .2s;
 }
+.submit:disabled{opacity:0.45;cursor:not-allowed;}
 
-.submit:disabled{
-opacity:0.45;
-cursor:not-allowed;
-}
-
-.loading{
-text-align:center;
-margin-top:12px;
-color:#666;
-}
-
-.thanks{
-text-align:center;
-}
+.loading{text-align:center;margin-top:12px;color:#666;}
+.thanks{text-align:center;}
 
 /* kruh pro fotku */
-
 .photo-frame{
-width:260px;
-height:260px;
-border-radius:50%;
-overflow:hidden;
-margin:0 auto 26px auto;
-box-shadow:0 14px 32px rgba(0,0,0,0.2);
-display:none;
+  width:260px;height:260px;border-radius:50%;overflow:hidden;
+  margin:0 auto 26px auto;box-shadow:0 14px 32px rgba(0,0,0,0.2);
+  display:none;
 }
 
-/* obrázek uvnitř */
-
+/* obrázek větší než kruh a posun */
 .photo-frame img{
-width:100%;
-height:100%;
-object-fit:cover;
-
-/* POSUN OBLIČEJE */
-object-position:50% 65%;
+  width:320px;   /* větší než kruh */
+  height:320px;
+  object-fit:cover;
+  transform:translate(-90px,-80px); /* posun obličeje do středu kruhu */
 }
 
 /* konfeti */
-
 #confetti{
-position:fixed;
-left:0;
-top:0;
-width:100%;
-height:100%;
-pointer-events:none;
+  position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;
 }
-
 </style>
 </head>
 
 <body>
-
 <div class="card">
 
 <form id="form">
-
 <h1>Yumi slaví 1 rok 🎂</h1>
 <div class="subtitle">Prosíme o potvrzení účasti</div>
 
@@ -172,54 +87,37 @@ pointer-events:none;
 <input id="name" type="text">
 
 <label>Přijdeš?</label>
-
 <div class="choice">
-<button data-value="ANO">ANO</button>
-<button data-value="NE">NE</button>
+  <button data-value="ANO">ANO</button>
+  <button data-value="NE">NE</button>
 </div>
-
 <input type="hidden" id="attending">
 
 <div id="counts" class="hidden">
-
 <label>Počet osob</label>
-
 <div class="row">
-<input id="adults" type="number" min="1" placeholder="Dospělí">
-<input id="children" type="number" min="0" placeholder="Děti">
+  <input id="adults" type="number" min="1" placeholder="Dospělí">
+  <input id="children" type="number" min="0" placeholder="Děti">
+</div>
 </div>
 
-</div>
-
-<button class="submit" id="submitBtn" type="submit">
-Odeslat
-</button>
-
-<div id="loading" class="loading hidden">
-Odesílám…
-</div>
-
+<button class="submit" id="submitBtn" type="submit">Odeslat</button>
+<div id="loading" class="loading hidden">Odesílám…</div>
 </form>
 
 <div id="thanks" class="thanks hidden">
-
 <div id="photoFrame" class="photo-frame">
 <img src="yumi.jpg">
 </div>
-
 <h2 id="thanksTitle"></h2>
 <p id="thanksText"></p>
-
 <canvas id="confetti"></canvas>
-
 </div>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
 <script>
-
 const BACKEND_URL="https://rsvp-backend1.vercel.app/api/rsvp";
 
 const form=document.getElementById("form");
@@ -238,112 +136,53 @@ const submitBtn=document.getElementById("submitBtn");
 const photoFrame=document.getElementById("photoFrame");
 
 document.querySelectorAll(".choice button").forEach(btn=>{
-
 btn.addEventListener("click",e=>{
-
 e.preventDefault();
-
-document.querySelectorAll(".choice button")
-.forEach(b=>b.classList.remove("active"));
-
+document.querySelectorAll(".choice button").forEach(b=>b.classList.remove("active"));
 btn.classList.add("active");
-
 attendingInput.value=btn.dataset.value;
-
-counts.classList.toggle(
-"hidden",
-attendingInput.value!=="ANO"
-);
-
+counts.classList.toggle("hidden", attendingInput.value!=="ANO");
 });
-
 });
 
 function validate(){
-
-let ok=true;
-
-[nameInput,adultsInput,childrenInput]
-.forEach(i=>i.classList.remove("error"));
-
-if(!nameInput.value.trim()){
-nameInput.classList.add("error");
-ok=false;
-}
-
-if(!attendingInput.value){
-ok=false;
-}
-
-if(attendingInput.value==="ANO"){
-
-if(adultsInput.value===""||Number(adultsInput.value)<1){
-adultsInput.classList.add("error");
-ok=false;
-}
-
-if(childrenInput.value===""){
-childrenInput.classList.add("error");
-ok=false;
-}
-
-}
-
-return ok;
-
+  let ok=true;
+  [nameInput,adultsInput,childrenInput].forEach(i=>i.classList.remove("error"));
+  if(!nameInput.value.trim()){nameInput.classList.add("error");ok=false;}
+  if(!attendingInput.value){ok=false;}
+  if(attendingInput.value==="ANO"){
+    if(adultsInput.value===""||Number(adultsInput.value)<1){adultsInput.classList.add("error");ok=false;}
+    if(childrenInput.value===""){childrenInput.classList.add("error");ok=false;}
+  }
+  return ok;
 }
 
 function launchConfetti(){
-
-const duration=1500;
-const end=Date.now()+duration;
-
-(function frame(){
-
-confetti({
-particleCount:4,
-angle:60,
-spread:55,
-origin:{x:0}
-});
-
-confetti({
-particleCount:4,
-angle:120,
-spread:55,
-origin:{x:1}
-});
-
-if(Date.now()<end){
-requestAnimationFrame(frame);
-}
-
-}());
-
+  const duration=1500;
+  const end=Date.now()+duration;
+  (function frame(){
+    confetti({particleCount:4,angle:60,spread:55,origin:{x:0}});
+    confetti({particleCount:4,angle:120,spread:55,origin:{x:1}});
+    if(Date.now()<end){requestAnimationFrame(frame);}
+  }());
 }
 
 form.addEventListener("submit",async e=>{
-
 e.preventDefault();
-
 if(!validate())return;
 
 loading.classList.remove("hidden");
 submitBtn.disabled=true;
 
 await fetch(BACKEND_URL,{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-name:nameInput.value.trim(),
-attending:attendingInput.value,
-adults:attendingInput.value==="ANO"
-?Number(adultsInput.value):0,
-children:attendingInput.value==="ANO"
-?Number(childrenInput.value):0
-})
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+    name:nameInput.value.trim(),
+    attending:attendingInput.value,
+    adults:attendingInput.value==="ANO"?Number(adultsInput.value):0,
+    children:attendingInput.value==="ANO"?Number(childrenInput.value):0
+  })
 });
 
 form.classList.add("hidden");
@@ -351,26 +190,17 @@ loading.classList.add("hidden");
 thanks.classList.remove("hidden");
 
 if(attendingInput.value==="ANO"){
-
-photoFrame.style.display="block";
-
-launchConfetti();
-
-thanksTitle.textContent="Děkujeme 💛";
-thanksText.textContent="Moc se na vás těšíme.";
-
+  photoFrame.style.display="block";
+  launchConfetti();
+  thanksTitle.textContent="Děkujeme 💛";
+  thanksText.textContent="Moc se na vás těšíme.";
 }else{
-
-photoFrame.style.display="none";
-
-thanksTitle.textContent="";
-thanksText.textContent="Mrzí nás, že se tentokrát neuvidíme, ale děkujeme za odpověď 💛";
-
+  photoFrame.style.display="none";
+  thanksTitle.textContent="";
+  thanksText.textContent="Mrzí nás, že se tentokrát neuvidíme, ale děkujeme za odpověď 💛";
 }
 
 });
-
 </script>
-
 </body>
 </html>
